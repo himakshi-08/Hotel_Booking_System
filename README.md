@@ -140,22 +140,123 @@ npm run lint
 | `npm run preview` | Preview production build |
 | `npm run lint` | Run ESLint checks |
 
-## 🔌 API Documentation
+## 🔌 Backend & API Documentation
 
-The project uses JSON Server as a mock API. API calls are made through `src/services/api.js` using Axios.
+### Backend Setup
 
-### Base Configuration
+This project uses **JSON Server** as a mock backend for development and testing purposes.
+
+#### Starting the Backend Server
+
+1. **Ensure db.json exists** in the project root
+2. **Start JSON Server** in a separate terminal:
+   ```bash
+   npx json-server --watch db.json --port 5000
+   ```
+   - The API will be available at `http://localhost:5000`
+   - Changes to `db.json` are watched in real-time
+   - Server supports full CRUD operations
+
+#### db.json Structure
+
+Create a `db.json` file in your project root with the following structure:
+
+```json
+{
+  "rooms": [
+    {
+      "id": 1,
+      "name": "Deluxe Suite",
+      "price": 150,
+      "description": "Spacious room with ocean view",
+      "image": "url-to-image",
+      "capacity": 2
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "userId": 1,
+      "roomId": 1,
+      "checkIn": "2025-12-10",
+      "checkOut": "2025-12-12",
+      "guests": 2,
+      "totalPrice": 300,
+      "status": "confirmed"
+    }
+  ],
+  "food": [
+    {
+      "id": 1,
+      "name": "Grilled Salmon",
+      "price": 25,
+      "description": "Fresh salmon with herbs",
+      "image": "url-to-image"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "userId": 1,
+      "items": [1, 2],
+      "totalPrice": 50,
+      "orderDate": "2025-12-05",
+      "status": "delivered"
+    }
+  ]
+}
+```
+
+#### API Base Configuration
+
 - **Base URL**: `http://localhost:5000`
+- **HTTP Client**: Axios
 - **Default Timeout**: 10000ms
+- **Configuration File**: `src/services/api.js`
 
-### Common Endpoints
-- `GET /rooms` - Fetch all rooms
-- `POST /bookings` - Create new booking
-- `GET /bookings` - Fetch all bookings
-- `PUT /bookings/:id` - Update booking
-- `DELETE /bookings/:id` - Delete booking
-- `GET /food` - Fetch food items
-- `POST /orders` - Place food order
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/rooms` | Fetch all rooms |
+| `GET` | `/rooms/:id` | Fetch specific room |
+| `POST` | `/bookings` | Create new booking |
+| `GET` | `/bookings` | Fetch all bookings |
+| `GET` | `/bookings/:id` | Fetch specific booking |
+| `PUT` | `/bookings/:id` | Update booking |
+| `DELETE` | `/bookings/:id` | Delete booking |
+| `GET` | `/food` | Fetch all food items |
+| `GET` | `/food/:id` | Fetch specific food item |
+| `POST` | `/orders` | Create food order |
+| `GET` | `/orders` | Fetch all orders |
+
+#### Frontend API Integration
+
+All API requests are made through `src/services/api.js`:
+
+```javascript
+// Example usage in components
+import { api } from '../services/api.js';
+
+// Get all rooms
+const rooms = await api.get('/rooms');
+
+// Create booking
+const booking = await api.post('/bookings', bookingData);
+
+// Update booking
+const updated = await api.put('/bookings/1', updatedData);
+
+// Delete booking
+await api.delete('/bookings/1');
+```
+
+#### Important Notes
+
+- ⚠️ **Do NOT commit `db.json` to GitHub** - It's in `.gitignore` for security reasons
+- 📝 **Database Persistence**: JSON Server stores data in `db.json`. Restart the server to restore original data
+- 🔄 **Real-time Updates**: Changes made through API calls are automatically saved to `db.json`
+- 🚀 **Production Deployment**: Replace JSON Server with a real backend (Node.js, Python, etc.) before going live
 
 ## 🎨 Pages & Components
 
