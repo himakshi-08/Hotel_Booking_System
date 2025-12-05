@@ -253,7 +253,6 @@ await api.delete('/bookings/1');
 
 #### Important Notes
 
-- ⚠️ **Do NOT commit `db.json` to GitHub** - It's in `.gitignore` for security reasons
 - 📝 **Database Persistence**: JSON Server stores data in `db.json`. Restart the server to restore original data
 - 🔄 **Real-time Updates**: Changes made through API calls are automatically saved to `db.json`
 - 🚀 **Production Deployment**: Replace JSON Server with a real backend (Node.js, Python, etc.) before going live
